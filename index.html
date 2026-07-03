@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exhale — A Safe Place to Talk</title>
+<meta name="description" content="Talk openly with an AI wellness companion, use free grounding tools, and find real licensed support near you when you need it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF9F4;
+    --bg-alt:#F1EADC;
+    --card:#FFFFFF;
+    --blue:#C3D9E4;
+    --blue-deep:#5F8CA3;
+    --blue-ink:#3E6376;
+    --green:#CBDAC2;
+    --green-deep:#749A69;
+    --green-ink:#4A6B41;
+    --ink:#2B2E27;
+    --ink-soft:#565A4F;
+    --ink-mute:#8B8E80;
+    --line:#E7DFCE;
+    --radius-lg:28px;
+    --radius-md:20px;
+    --radius-sm:14px;
+    --shadow-sm:0 2px 10px rgba(43,46,39,0.05);
+    --shadow-md:0 12px 32px rgba(43,46,39,0.08);
+    --ease:cubic-bezier(.4,0,.2,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  h1,h2,h3,h4{margin:0;font-family:'Newsreader',serif;font-weight:500;color:var(--ink);}
+  p{margin:0;}
+  ul{margin:0;padding:0;list-style:none;}
+  textarea,input{font-family:inherit;font-size:1rem;}
+
+  :focus-visible{
+    outline:2.5px solid var(--blue-deep);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 22px;
+  }
+  .section{
+    padding:76px 0;
+  }
+  .section-alt{background:var(--bg-alt);}
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.78rem;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--green-ink);
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--green-deep);
+    display:inline-block;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:44px;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem,3.6vw,2.5rem);
+    font-style:italic;
+    line-height:1.15;
+    margin-bottom:14px;
+  }
+  .section-head p{
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    max-width:520px;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.95rem;
+    border:1.5px solid transparent;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{
+    background:var(--ink);
+    color:var(--bg);
+  }
+  .btn-primary:hover{box-shadow:var(--shadow-md);}
+  .btn-secondary{
+    background:transparent;
+    border-color:var(--ink);
+    color:var(--ink);
+  }
+  .btn-secondary:hover{background:var(--ink);color:var(--bg);}
+  .btn-soft{
+    background:var(--card);
+    border-color:var(--line);
+    color:var(--ink);
+    font-size:0.88rem;
+    padding:11px 18px;
+  }
+  .btn-soft:hover{border-color:var(--blue-deep);}
+  .btn-full{width:100%;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(251,249,244,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 22px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:1.35rem;
+    font-weight:500;
+    text-decoration:none;
+  }
+  .brand-dot{
+    width:16px;height:16px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--blue), var(--green-deep));
+    animation:breathe 4s var(--ease) infinite;
+  }
+  .nav-cta{display:none;}
+  @media(min-width:640px){ .nav-cta{display:inline-flex;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:64px 0 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    gap:48px;
+    align-items:center;
+  }
+  @media(min-width:900px){
+    .hero-grid{grid-template-columns:1.1fr 0.9fr;}
+  }
+  .hero h1{
+    font-size:clamp(2.1rem,5.4vw,3.4rem);
+    line-height:1.12;
+    font-style:italic;
+    max-width:15ch;
+  }
+  .hero p.lead{
+    margin-top:20px;
+    font-size:1.12rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-ctas{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:32px;
+  }
+  .hero-trust{
+    margin-top:18px;
+    font-size:0.85rem;
+    color:var(--ink-mute);
+  }
+
+  .breath-visual{
+    position:relative;
+    aspect-ratio:1/1;
+    max-width:380px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .breath-ring{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:1px solid var(--line);
+  }
+  .breath-ring.r2{inset:12%;}
+  .breath-core{
+    width:56%;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--blue) 0%, var(--green-deep) 100%);
+    animation:breathe 4s var(--ease) infinite;
+    box-shadow:0 30px 60px -20px rgba(95,140,163,0.45);
+  }
+
+  @keyframes breathe{
+    0%,100%{transform:scale(0.86);}
+    50%{transform:scale(1);}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .breath-core, .brand-dot{animation:none;}
+  }
+
+  /* ---------- reveal ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .reveal.is-visible{opacity:1;transform:none;}
+
+  /* ---------- CHAT ---------- */
+  .chat-card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);
+    border:1px solid var(--line);
+    overflow:hidden;
+    max-width:640px;
+  }
+  .chat-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:20px 22px;
+    border-bottom:1px solid var(--line);
+  }
+  .chat-avatar{
+    width:38px;height:38px;border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--blue), var(--green-deep));
+    flex-shrink:0;
+  }
+  .chat-head-text strong{display:block;font-size:0.98rem;}
+  .chat-head-text span{font-size:0.82rem;color:var(--ink-mute);}
+  .chat-body{
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:220px;
+    max-height:420px;
+    overflow-y:auto;
+  }
+  .bubble{
+    max-width:78%;
+    padding:12px 16px;
+    border-radius:18px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .bubble.ai{
+    background:var(--bg-alt);
+    border-bottom-left-radius:6px;
+    align-self:flex-start;
+  }
+  .bubble.user{
+    background:var(--ink);
+    color:var(--bg);
+    border-bottom-right-radius:6px;
+    align-self:flex-end;
+  }
+  .bubble.crisis{
+    background:#EFF3EC;
+    border:1px solid var(--green-deep);
+    border-bottom-left-radius:6px;
+    align-self:flex-start;
+  }
+  .bubble.crisis a{color:var(--green-ink);font-weight:700;text-decoration:underline;}
+  .bubble.crisis .find-help-btn{margin-top:12px;text-decoration:none;}
+  .chat-foot{
+    display:flex;
+    gap:10px;
+    padding:16px 18px;
+    border-top:1px solid var(--line);
+    background:var(--bg);
+  }
+  .chat-foot input{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:12px 18px;
+    background:var(--card);
+  }
+  .chat-foot button{
+    width:44px;height:44px;
+    border-radius:50%;
+    border:none;
+    background:var(--ink);
+    color:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .chat-note{
+    font-size:0.8rem;
+    color:var(--ink-mute);
+    margin-top:14px;
+    max-width:640px;
+  }
+
+  /* ---------- TOOLS ---------- */
+  .tools-grid{
+    display:grid;
+    gap:20px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:700px){ .tools-grid{grid-template-columns:1fr 1fr;} }
+  @media(min-width:1024px){ .tools-grid{grid-template-columns:repeat(3,1fr);} }
+
+  .tool-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:26px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .tool-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+  .tool-card.wide{grid-column:1/-1;}
+  @media(min-width:700px){ .tool-card.wide{grid-column:span 2;} }
+
+  .icon-badge{
+    width:42px;height:42px;
+    border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--bg-alt);
+  }
+  .icon-badge svg{width:20px;height:20px;stroke:var(--green-ink);}
+  .tool-card h3{font-size:1.1rem;font-style:italic;}
+  .tool-card p.desc{color:var(--ink-soft);font-size:0.92rem;}
+
+  .mood-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .mood-chip{
+    border:1px solid var(--line);
+    background:var(--bg);
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all .2s var(--ease);
+  }
+  .mood-chip[aria-pressed="true"]{
+    background:var(--ink);
+    color:var(--bg);
+    border-color:var(--ink);
+  }
+  .mood-log{font-size:0.82rem;color:var(--ink-mute);min-height:18px;}
+
+  .breath-tool-visual{
+    width:120px;height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--blue), var(--green-deep));
+    margin:6px auto 4px;
+    transition:transform 4s var(--ease);
+  }
+  .breath-cue{
+    text-align:center;
+    font-size:0.88rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    min-height:20px;
+  }
+
+  .journal-area{
+    width:100%;
+    min-height:96px;
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px;
+    resize:vertical;
+    background:var(--bg);
+  }
+  .prompt-text{
+    font-style:italic;
+    font-family:'Newsreader',serif;
+    color:var(--blue-ink);
+    font-size:0.98rem;
+  }
+
+  .step-list{display:flex;flex-direction:column;gap:10px;}
+  .step-item{
+    display:none;
+    background:var(--bg-alt);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+    font-size:0.92rem;
+  }
+  .step-item.active{display:block;}
+  .step-progress{font-size:0.78rem;color:var(--ink-mute);}
+
+  /* ---------- FIND SUPPORT ---------- */
+  .find-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    padding:30px;
+    box-shadow:var(--shadow-sm);
+  }
+  .find-form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  @media(min-width:560px){ .find-form{flex-direction:row;} }
+  .find-form input{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:14px 20px;
+    background:var(--bg);
+  }
+  .results{
+    margin-top:28px;
+    display:grid;
+    gap:16px;
+  }
+  @media(min-width:760px){ .results{grid-template-columns:repeat(3,1fr);} }
+  .result-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:20px;
+    background:var(--bg);
+  }
+  .result-card .tag{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--blue-ink);
+    background:var(--blue);
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .result-card h4{font-size:1.02rem;font-style:italic;margin-bottom:4px;}
+  .result-card .meta{font-size:0.85rem;color:var(--ink-soft);margin-bottom:2px;}
+  .results-caption{
+    font-size:0.8rem;
+    color:var(--ink-mute);
+    margin-top:16px;
+  }
+  .find-empty{
+    margin-top:24px;
+    font-size:0.9rem;
+    color:var(--ink-mute);
+  }
+  .result-link{
+    text-decoration:none;
+    display:block;
+    transition:transform .2s var(--ease), border-color .2s var(--ease);
+  }
+  .result-link:hover{transform:translateY(-3px);border-color:var(--blue-deep);}
+  .journal-hint{font-size:0.78rem;color:var(--ink-mute);margin-top:-6px;}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps-flow{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .flow-step{
+    display:flex;
+    gap:20px;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .flow-step:last-child{border-bottom:none;}
+  .flow-index{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:1.4rem;
+    color:var(--blue-deep);
+    width:46px;
+    flex-shrink:0;
+  }
+  .flow-step h4{font-size:1.05rem;margin-bottom:4px;}
+  .flow-step p{color:var(--ink-soft);font-size:0.94rem;}
+
+  /* ---------- WHY ---------- */
+  .why-grid{
+    display:grid;
+    gap:40px;
+    align-items:center;
+  }
+  @media(min-width:900px){ .why-grid{grid-template-columns:1fr 1fr;} }
+  .why-list{display:flex;flex-direction:column;gap:18px;}
+  .why-item{display:flex;gap:14px;}
+  .why-item .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--green-deep);
+    margin-top:9px;
+    flex-shrink:0;
+  }
+  .why-item p{color:var(--ink-soft);font-size:0.98rem;}
+  .why-visual{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    padding:34px;
+    box-shadow:var(--shadow-sm);
+  }
+  .why-visual .quote{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:1.3rem;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  .why-visual .path{
+    margin-top:22px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    font-size:0.85rem;
+    color:var(--ink-mute);
+  }
+  .why-visual .path span.node{
+    background:var(--bg-alt);
+    padding:6px 12px;
+    border-radius:999px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- TRUST ---------- */
+  .trust-card{
+    background:var(--card);
+    border:1.5px solid var(--green-deep);
+    border-radius:var(--radius-lg);
+    padding:34px;
+  }
+  .trust-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .trust-head .icon-badge{background:var(--green);}
+  .trust-list{
+    display:grid;
+    gap:14px;
+  }
+  @media(min-width:760px){ .trust-list{grid-template-columns:1fr 1fr;} }
+  .trust-item{
+    display:flex;
+    gap:10px;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+  .trust-item svg{
+    width:17px;height:17px;flex-shrink:0;margin-top:2px;
+    stroke:var(--green-deep);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:48px 0 32px;
+    border-top:1px solid var(--line);
+  }
+  .footer-inner{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+  @media(min-width:700px){
+    .footer-inner{flex-direction:row;justify-content:space-between;align-items:flex-start;}
+  }
+  .footer-links{display:flex;flex-wrap:wrap;gap:22px;font-size:0.88rem;color:var(--ink-soft);}
+  .footer-links a{text-decoration:none;}
+  .footer-links a:hover{color:var(--ink);}
+  .emergency-line{
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--green-ink);
+    max-width:420px;
+  }
+  .footer-brand{
+    font-family:'Newsreader',serif;
+    font-style:italic;
+    font-size:1.15rem;
+  }
+  .copyright{font-size:0.78rem;color:var(--ink-mute);margin-top:22px;}
+
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="brand-dot" aria-hidden="true"></span>Exhale</a>
+    <a href="#chat" class="btn btn-primary nav-cta">Start Talking</a>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Free · Private · Always here</span>
+        <h1>A safe place to talk, and find real support when you need it</h1>
+        <p class="lead">Share what's on your mind with an AI companion that listens, helps you reflect, and connects you to real professionals when needed.</p>
+        <div class="hero-ctas">
+          <a href="#chat" class="btn btn-primary">Start Talking</a>
+          <a href="#tools" class="btn btn-secondary">Try Free Tools</a>
+        </div>
+        <p class="hero-trust">No login required · Nothing you say is ever sold</p>
+      </div>
+      <div class="breath-visual" aria-hidden="true">
+        <div class="breath-ring"></div>
+        <div class="breath-ring r2"></div>
+        <div class="breath-core"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="section" id="chat">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Meet your companion</span>
+        <h2>AI Wellness Companion</h2>
+        <p>A calm space to say what you're carrying. No judgment, no diagnosis — just someone listening, and gentle next steps when you want them.</p>
+      </div>
+
+      <div class="chat-card reveal">
+        <div class="chat-head">
+          <div class="chat-avatar" aria-hidden="true"></div>
+          <div class="chat-head-text">
+            <strong>Wellness Companion</strong>
+            <span>Here to listen, not to diagnose</span>
+          </div>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="bubble ai">I'm glad you're here. There's no right way to start — just say whatever's true right now.</div>
+          <div class="bubble user">I don't even know where to start. Work has been a lot lately.</div>
+          <div class="bubble ai">That's okay, you don't need the whole story yet. What's sitting heaviest on you today?</div>
+        </div>
+        <form class="chat-foot" id="chatForm">
+          <label for="chatInput" class="sr-only">Type a message</label>
+          <input id="chatInput" type="text" placeholder="Type how you're feeling…" autocomplete="off">
+          <button type="submit" aria-label="Send message">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </div>
+      <p class="chat-note">This is a demonstration of how the companion responds — including how it responds if you're struggling. Exhale is not a doctor, therapist, or emergency service. If you are in immediate danger, please contact local emergency services right away.</p>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section section-alt" id="tools">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Free, always</span>
+        <h2>Tools to help you feel better</h2>
+        <p>No login. No cost. Just something to reach for when things feel like a lot.</p>
+      </div>
+
+      <div class="tools-grid">
+
+        <!-- Mood check-in -->
+        <div class="tool-card reveal">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9" y2="9"/><line x1="15" y1="9" x2="15" y2="9"/></svg>
+          </div>
+          <h3>Mood check-in</h3>
+          <p class="desc">Name how you're doing right now, no explanation needed.</p>
+          <div class="mood-row" role="group" aria-label="Select your mood">
+            <button class="mood-chip" aria-pressed="false">Heavy</button>
+            <button class="mood-chip" aria-pressed="false">Uneasy</button>
+            <button class="mood-chip" aria-pressed="false">Steady</button>
+            <button class="mood-chip" aria-pressed="false">Lighter</button>
+            <button class="mood-chip" aria-pressed="false">Calm</button>
+          </div>
+          <p class="mood-log" id="moodLog"></p>
+        </div>
+
+        <!-- Breathing -->
+        <div class="tool-card reveal">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/><path d="M17.6 8.6A2 2 0 1 1 19 12H2"/></svg>
+          </div>
+          <h3>Guided breathing</h3>
+          <p class="desc">A few slow rounds to settle your body before your mind.</p>
+          <div class="breath-tool-visual" id="breathVisual" aria-hidden="true"></div>
+          <p class="breath-cue" id="breathCue">Press start when you're ready</p>
+          <button class="btn btn-soft btn-full" id="breathBtn">Start breathing</button>
+        </div>
+
+        <!-- Journal -->
+        <div class="tool-card wide reveal">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </div>
+          <h3>Thought reflection journal</h3>
+          <p class="desc">Write freely. If you're stuck, ask for a prompt to get you moving.</p>
+          <p class="prompt-text" id="promptText">"What's one thing you're carrying that you haven't said out loud yet?"</p>
+          <textarea class="journal-area" id="journalArea" placeholder="Start writing here — this stays on your screen only."></textarea>
+          <p class="journal-hint">Saved privately in your browser only — nothing is uploaded or sent anywhere.</p>
+          <button class="btn btn-soft" id="promptBtn" style="align-self:flex-start;">Give me a new prompt</button>
+        </div>
+
+        <!-- Stress reset -->
+        <div class="tool-card reveal">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>
+          </div>
+          <h3>Stress reset</h3>
+          <p class="desc">A two-minute grounding exercise using your five senses.</p>
+          <div class="step-list" id="stressSteps"></div>
+          <p class="step-progress" id="stressProgress"></p>
+          <button class="btn btn-soft btn-full" id="stressBtn">Begin reset</button>
+        </div>
+
+        <!-- Sleep wind-down -->
+        <div class="tool-card reveal">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+          </div>
+          <h3>Sleep wind-down</h3>
+          <p class="desc">A short checklist to help your mind slow down before bed.</p>
+          <div class="step-list" id="sleepSteps"></div>
+          <p class="step-progress" id="sleepProgress"></p>
+          <button class="btn btn-soft btn-full" id="sleepBtn">Begin wind-down</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FIND SUPPORT -->
+  <section class="section" id="find-support">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">When you're ready for more</span>
+        <h2>Find licensed support near you</h2>
+        <p>Real, verified professionals — therapists, psychologists, psychiatrists, and counseling centers — matched to where you are.</p>
+      </div>
+
+      <div class="find-card reveal">
+        <form class="find-form" id="findForm">
+          <label for="cityInput" class="sr-only">Enter your city or area</label>
+          <input id="cityInput" type="text" placeholder="Enter your city or area, e.g. Abu Dhabi">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <button type="button" class="btn btn-soft" id="useLocationBtn" style="margin-top:12px;">Use my current location instead</button>
+        <p class="find-empty" id="findEmpty">Enter a location, or share your location, to see real results near you.</p>
+        <div class="results" id="findResults" hidden></div>
+        <p class="results-caption" id="findCaption" hidden>These open real Google Maps results in a new tab — no account, login, or API key needed.</p>
+        <p class="results-caption">Want to talk to someone today? <a href="https://www.betterhelp.com" target="_blank" rel="noopener">BetterHelp</a> and <a href="https://www.talkspace.com" target="_blank" rel="noopener">Talkspace</a> connect you with licensed therapists online, anywhere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>From feeling overwhelmed to knowing your next step</h2>
+      </div>
+      <div class="steps-flow reveal">
+        <div class="flow-step">
+          <span class="flow-index">01</span>
+          <div><h4>Talk to your companion</h4><p>Open up in your own words, whenever you need to.</p></div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-index">02</span>
+          <div><h4>Say what's really going on</h4><p>Express your thoughts and emotions freely, without judgment.</p></div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-index">03</span>
+          <div><h4>Get calm reflection</h4><p>Receive thoughtful, practical support that helps you understand what you're feeling.</p></div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-index">04</span>
+          <div><h4>Use tools to regulate</h4><p>Reach for breathing, journaling, or grounding exercises whenever stress builds up.</p></div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-index">05</span>
+          <div><h4>Connect when it matters</h4><p>If you need more, we help you find and book real, licensed professionals nearby.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="section">
+    <div class="wrap">
+      <div class="why-grid">
+        <div class="reveal">
+          <span class="eyebrow">Why this exists</span>
+          <h2 style="font-size:clamp(1.7rem,3.6vw,2.3rem);margin-bottom:24px;">Not everyone has someone safe to talk to</h2>
+          <div class="why-list">
+            <div class="why-item"><span class="dot" aria-hidden="true"></span><p>Emotional support should be accessible and free, not locked behind cost or waiting lists.</p></div>
+            <div class="why-item"><span class="dot" aria-hidden="true"></span><p>An AI companion can help people feel less alone in the moment.</p></div>
+            <div class="why-item"><span class="dot" aria-hidden="true"></span><p>But real professionals are essential for deeper, ongoing care.</p></div>
+            <div class="why-item"><span class="dot" aria-hidden="true"></span><p>Exhale exists to bridge the space between self-help and real therapy.</p></div>
+          </div>
+        </div>
+        <div class="why-visual reveal">
+          <p class="quote">"From I feel overwhelmed, to I understand myself, to I know where to get real help if I need it."</p>
+          <div class="path">
+            <span class="node">Companion</span> → <span class="node">Free tools</span> → <span class="node">Real professionals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="trust-card reveal">
+        <div class="trust-head">
+          <div class="icon-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          </div>
+          <h2 style="font-size:1.4rem;">Trust & safety, made clear</h2>
+        </div>
+        <div class="trust-list">
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Exhale is not a medical or emergency service.</p></div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>The AI does not diagnose and does not replace licensed professionals.</p></div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>It offers emotional support and wellness guidance only.</p></div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>You're encouraged to seek professional help whenever you feel you need it.</p></div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Not sure who to call? <a href="https://findahelpline.com" target="_blank" rel="noopener" style="color:var(--green-ink);font-weight:700;">findahelpline.com</a> lists free, confidential crisis lines by country.</p></div>
+          <div class="trust-item" style="grid-column:1/-1;"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>In an emergency, please contact local emergency services immediately — don't wait on a chat response.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>
+      <div class="footer-brand"><span class="brand-dot" style="display:inline-block;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 32% 28%,var(--blue),var(--green-deep));margin-right:6px;vertical-align:middle;"></span>Exhale</div>
+      <p class="copyright">A free AI wellness companion. Not a substitute for professional care.</p>
+    </div>
+    <div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact Support</a>
+      </div>
+      <p class="emergency-line" style="margin-top:16px;">If you are in crisis, please contact local emergency services immediately, or find a free helpline at <a href="https://findahelpline.com" target="_blank" rel="noopener" style="color:var(--green-ink);">findahelpline.com</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  /* ---------- scroll reveal ---------- */
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:0.12});
+    revealEls.forEach(el=>io.observe(el));
+  } else {
+    revealEls.forEach(el=>el.classList.add('is-visible'));
+  }
+
+  /* ---------- chat ---------- */
+  const chatBody = document.getElementById('chatBody');
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput');
+
+  // Set this to your deployed backend URL to make the companion respond with
+  // a real AI model instead of the local fallback replies below.
+  // See chat-backend-example.js for a ready-to-deploy proxy (keeps your API
+  // key secret, works on Cloudflare Workers' free tier).
+  // Example: const CHAT_API_ENDPOINT = 'https://exhale-chat.yourname.workers.dev';
+  const CHAT_API_ENDPOINT = '';
+
+  // Crisis detection always runs locally, instantly, and never depends on
+  // CHAT_API_ENDPOINT being reachable — this is the one part of the app that
+  // must never fail silently.
+  const CRISIS_WORDS = ['suicide','kill myself','end my life','want to die','hurt myself','self harm','self-harm','can\'t go on','no reason to live','give up on life'];
+
+  const REPLIES_BY_TOPIC = [
+    { test:/work|job|boss|deadline|coworker/i, replies:[
+      "Work stress has a way of following you home. What part of it is loudest right now — the workload, or what it's doing to how you feel about yourself?",
+      "That sounds draining. Is this a rough week, or has it felt like this for a while?"
+    ]},
+    { test:/sleep|tired|insomnia|exhausted|can't sleep/i, replies:[
+      "Being that tired makes everything feel heavier. Is it hard to fall asleep, or hard to stay asleep?",
+      "That kind of exhaustion is hard to push through. Have you had a real chance to rest today, even for a few minutes?"
+    ]},
+    { test:/alone|lonely|no one|nobody/i, replies:[
+      "Feeling alone in it is one of the hardest parts. I'm glad you said it here — what would even slightly less alone look like this week?",
+      "That's a heavy feeling to carry by yourself. Is there anyone in your life you've been able to be honest with about this?"
+    ]},
+    { test:/anxious|anxiety|panic|overwhelmed|can't breathe/i, replies:[
+      "That sounds like a lot happening in your body right now. Would it help to slow down together for a moment, maybe with a short breathing exercise?",
+      "Overwhelm can make everything feel urgent at once. What's the one thing, if anything, that actually needs your attention right now?"
+    ]},
+    { test:/sad|down|depress|empty|numb/i, replies:[
+      "That sounds heavy to sit with. You don't have to explain it perfectly, just tell me what today has felt like.",
+      "Thank you for saying that plainly. How long has it felt like this?"
+    ]}
+  ];
+
+  const GENTLE_REPLIES = [
+    "Thank you for telling me that. Can you say a little more about what's underneath it?",
+    "That sounds like a lot to carry. What would feel even slightly lighter right now?",
+    "I hear you. Sometimes just naming it out loud helps — what's the loudest thought right now?",
+    "That makes sense given what you're dealing with. Would a short breathing exercise help, or would you rather keep talking?"
+  ];
+
+  function pickLocalReply(lower){
+    for(const topic of REPLIES_BY_TOPIC){
+      if(topic.test.test(lower)) return topic.replies[Math.floor(Math.random()*topic.replies.length)];
+    }
+    return GENTLE_REPLIES[Math.floor(Math.random()*GENTLE_REPLIES.length)];
+  }
+
+  async function getAIReply(message, lower){
+    if(CHAT_API_ENDPOINT){
+      try{
+        const controller = new AbortController();
+        const timeout = setTimeout(()=>controller.abort(), 8000);
+        const res = await fetch(CHAT_API_ENDPOINT, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({message}),
+          signal: controller.signal
+        });
+        clearTimeout(timeout);
+        if(res.ok){
+          const data = await res.json();
+          if(data && data.reply) return data.reply;
+        }
+      }catch(err){
+        console.warn('Companion backend unreachable, using local reply instead.', err);
+      }
+    }
+    return pickLocalReply(lower);
+  }
+
+  function addBubble(text, cls){
+    const div = document.createElement('div');
+    div.className = 'bubble ' + cls;
+    div.textContent = text;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return div;
+  }
+
+  function addCrisisBubble(){
+    const div = document.createElement('div');
+    div.className = 'bubble crisis';
+    div.innerHTML = "I'm really glad you told me. You don't have to carry this alone, and this feeling can shift with the right support. " +
+      "If you're in immediate danger, please contact local emergency services right now. " +
+      "You can also reach a free, confidential crisis line in your country any time at " +
+      "<a href=\"https://findahelpline.com\" target=\"_blank\" rel=\"noopener\">findahelpline.com</a>.";
+    const btn = document.createElement('a');
+    btn.href = '#find-support';
+    btn.className = 'btn btn-primary find-help-btn';
+    btn.textContent = 'Find professional help near you';
+    div.appendChild(document.createElement('br'));
+    div.appendChild(btn);
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  chatForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const val = chatInput.value.trim();
+    if(!val) return;
+    addBubble(val, 'user');
+    chatInput.value = '';
+
+    const lower = val.toLowerCase();
+    const isCrisis = CRISIS_WORDS.some(w => lower.includes(w));
+
+    if(isCrisis){
+      setTimeout(addCrisisBubble, 400);
+      return;
+    }
+
+    const placeholder = addBubble('…', 'ai');
+    const reply = await getAIReply(val, lower);
+    placeholder.textContent = reply;
+    chatBody.scrollTop = chatBody.scrollHeight;
+  });
+
+  /* ---------- mood check-in (persisted locally, per device) ---------- */
+  const moodChips = document.querySelectorAll('.mood-chip');
+  const moodLog = document.getElementById('moodLog');
+  const MOOD_KEY = 'exhale_moods';
+
+  function loadMoods(){
+    try{ return JSON.parse(localStorage.getItem(MOOD_KEY) || '[]'); }
+    catch(e){ return []; }
+  }
+  function renderMoodLog(entries){
+    moodLog.textContent = entries.length ? 'Logged: ' + entries.slice(0,3).join('   ') : '';
+  }
+  let moodEntries = loadMoods();
+  renderMoodLog(moodEntries);
+
+  moodChips.forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      moodChips.forEach(c=>c.setAttribute('aria-pressed','false'));
+      chip.setAttribute('aria-pressed','true');
+      const now = new Date();
+      const time = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      moodEntries.unshift(chip.textContent + ' · ' + time);
+      moodEntries = moodEntries.slice(0,20);
+      localStorage.setItem(MOOD_KEY, JSON.stringify(moodEntries));
+      renderMoodLog(moodEntries);
+    });
+  });
+
+  /* ---------- breathing tool ---------- */
+  const breathBtn = document.getElementById('breathBtn');
+  const breathVisual = document.getElementById('breathVisual');
+  const breathCue = document.getElementById('breathCue');
+  let breathActive = false;
+  let breathTimeout = null;
+
+  function breathCycle(){
+    if(!breathActive) return;
+    breathCue.textContent = 'Breathe in…';
+    breathVisual.style.transform = 'scale(1.35)';
+    breathTimeout = setTimeout(()=>{
+      if(!breathActive) return;
+      breathCue.textContent = 'Hold…';
+      breathTimeout = setTimeout(()=>{
+        if(!breathActive) return;
+        breathCue.textContent = 'Breathe out…';
+        breathVisual.style.transform = 'scale(0.85)';
+        breathTimeout = setTimeout(breathCycle, 4000);
+      }, 2000);
+    }, 4000);
+  }
+
+  breathBtn.addEventListener('click', ()=>{
+    breathActive = !breathActive;
+    if(breathActive){
+      breathBtn.textContent = 'Stop';
+      breathCycle();
+    } else {
+      breathBtn.textContent = 'Start breathing';
+      breathCue.textContent = 'Press start when you\'re ready';
+      breathVisual.style.transform = 'scale(1)';
+      clearTimeout(breathTimeout);
+    }
+  });
+
+  /* ---------- journal prompts ---------- */
+  const PROMPTS = [
+    "What's one thing you're carrying that you haven't said out loud yet?",
+    "If today had a weather forecast, what would it be?",
+    "What's something small that would make tomorrow easier?",
+    "What are you being hard on yourself about right now?",
+    "What do you need to hear today that no one has said to you?"
+  ];
+  const promptText = document.getElementById('promptText');
+  const promptBtn = document.getElementById('promptBtn');
+  let promptIndex = 0;
+  promptBtn.addEventListener('click', ()=>{
+    promptIndex = (promptIndex+1) % PROMPTS.length;
+    promptText.textContent = '"' + PROMPTS[promptIndex] + '"';
+  });
+
+  const journalArea = document.getElementById('journalArea');
+  const JOURNAL_KEY = 'exhale_journal_draft';
+  const savedDraft = localStorage.getItem(JOURNAL_KEY);
+  if(savedDraft) journalArea.value = savedDraft;
+  let journalSaveTimer;
+  journalArea.addEventListener('input', ()=>{
+    clearTimeout(journalSaveTimer);
+    journalSaveTimer = setTimeout(()=>{
+      localStorage.setItem(JOURNAL_KEY, journalArea.value);
+    }, 500);
+  });
+
+  /* ---------- step tools (stress reset + sleep wind-down) ---------- */
+  function buildStepTool(containerId, progressId, btnId, steps, doneLabel){
+    const container = document.getElementById(containerId);
+    const progress = document.getElementById(progressId);
+    const btn = document.getElementById(btnId);
+    steps.forEach((s,i)=>{
+      const el = document.createElement('div');
+      el.className = 'step-item';
+      el.textContent = s;
+      container.appendChild(el);
+    });
+    const items = container.querySelectorAll('.step-item');
+    let idx = -1;
+
+    function show(i){
+      items.forEach((el,j)=> el.classList.toggle('active', j===i));
+      progress.textContent = i>=0 ? ('Step ' + (i+1) + ' of ' + steps.length) : '';
+    }
+
+    btn.addEventListener('click', ()=>{
+      idx++;
+      if(idx >= steps.length){
+        idx = -1;
+        show(-1);
+        btn.textContent = btn.dataset.startLabel;
+        return;
+      }
+      show(idx);
+      btn.textContent = (idx === steps.length-1) ? doneLabel : 'Next';
+    });
+  }
+
+  const stressBtn = document.getElementById('stressBtn');
+  stressBtn.dataset.startLabel = 'Begin reset';
+  buildStepTool('stressSteps','stressProgress','stressBtn',[
+    'Name 5 things you can see around you.',
+    'Name 4 things you can physically feel.',
+    'Name 3 things you can hear right now.',
+    'Name 2 things you can smell.',
+    'Name 1 thing you can taste, or one thing you\'re grateful for.'
+  ], 'Finish');
+
+  const sleepBtn = document.getElementById('sleepBtn');
+  sleepBtn.dataset.startLabel = 'Begin wind-down';
+  buildStepTool('sleepSteps','sleepProgress','sleepBtn',[
+    'Dim your lights and put your phone somewhere out of reach.',
+    'Take four slow breaths — in for four counts, out for six.',
+    'Unclench your jaw, drop your shoulders, soften your hands.',
+    'Think of one small good moment from today.',
+    'Let your thoughts drift, without needing to follow them anywhere.'
+  ], 'Finish');
+
+  /* ---------- find support (real Google Maps search, no API key needed) ---------- */
+  const findForm = document.getElementById('findForm');
+  const cityInput = document.getElementById('cityInput');
+  const findResults = document.getElementById('findResults');
+  const findEmpty = document.getElementById('findEmpty');
+  const findCaption = document.getElementById('findCaption');
+  const useLocationBtn = document.getElementById('useLocationBtn');
+
+  const CATEGORIES = [
+    {label:'Therapists', query:'licensed therapist'},
+    {label:'Psychologists', query:'psychologist'},
+    {label:'Psychiatrists', query:'psychiatrist'},
+    {label:'Counseling centers', query:'counseling center'}
+  ];
+
+  function renderResults(locationText){
+    findResults.innerHTML = '';
+    CATEGORIES.forEach(cat=>{
+      const url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(cat.query + ' near ' + locationText);
+      const card = document.createElement('a');
+      card.className = 'result-card result-link';
+      card.href = url;
+      card.target = '_blank';
+      card.rel = 'noopener';
+      card.innerHTML = '<span class="tag">Open in Maps</span><h4>' + cat.label + '</h4><p class="meta">Near ' + locationText + '</p>';
+      findResults.appendChild(card);
+    });
+    findResults.hidden = false;
+    findCaption.hidden = false;
+    findEmpty.hidden = true;
+  }
+
+  findForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const city = cityInput.value.trim();
+    if(!city) return;
+    renderResults(city);
+  });
+
+  useLocationBtn.addEventListener('click', function(){
+    if(!navigator.geolocation){
+      findEmpty.hidden = false;
+      findEmpty.textContent = "Location access isn't available in this browser — try entering your city instead.";
+      return;
+    }
+    const originalLabel = useLocationBtn.textContent;
+    useLocationBtn.textContent = 'Finding your location…';
+    useLocationBtn.disabled = true;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      const coords = pos.coords.latitude.toFixed(4) + ',' + pos.coords.longitude.toFixed(4);
+      renderResults(coords);
+      useLocationBtn.textContent = originalLabel;
+      useLocationBtn.disabled = false;
+    }, function(){
+      findEmpty.hidden = false;
+      findEmpty.textContent = "We couldn't access your location — try entering your city instead.";
+      useLocationBtn.textContent = originalLabel;
+      useLocationBtn.disabled = false;
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
